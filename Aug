@@ -1,4 +1,4 @@
-[{“xto":["Justin Boyd"],"month":"Aug","xfrom":"Mark E Haedicke","from":"mark.haedicke@enron.com","time":"10:39:00","to":["justin.boyd@enron.com"],"day":"17"},
+[{"xto":["Justin Boyd"],"month":"Aug","xfrom":"Mark E Haedicke","from":"mark.haedicke@enron.com","time":"10:39:00","to":["justin.boyd@enron.com"],"day":"17"},
 {"xto":["Elizabeth Sager"],"month":"Aug","xfrom":"Mark E Haedicke","from":"mark.haedicke@enron.com","time":"13:46:00","to":["elizabeth.sager@enron.com"],"day":"24"},
 {"xto":["Justin Boyd"],"month":"Aug","xfrom":"Mark E Haedicke","from":"mark.haedicke@enron.com","time":"10:39:00","to":["justin.boyd@enron.com"],"day":"17"},
 {"xto":["Elizabeth Sager"],"month":"Aug","xfrom":"Mark E Haedicke","from":"mark.haedicke@enron.com","time":"13:46:00","to":["elizabeth.sager@enron.com"],"day":"24"},
