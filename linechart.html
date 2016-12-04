@@ -1,0 +1,88 @@
+<html>
+<head>
+    <title>Line chart</title>
+    <style>
+    
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Monthly distribution line chart</h1>
+        <svg id="linechart" width = "800" height="400"></svg>
+    </div>
+</body>
+    
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+<script>
+    //input data
+    
+    
+    // Create parameters
+        var chartwidth = 800;
+        var chartheight = 400;
+        var margin = { top:20,left:50,right:20,bottom:20};
+        var innerWidth = chartwidth - margin.left - margin.right;
+        var innerHeight = chartheight - margin.top - margin.bottom;
+    
+    // Global parameters
+        var chart = d3.select("#linechart");
+        var xAxisGroup = chart.append("g")
+            .attr("transform","translate(0," + (innerHeight + margin.top) +")");
+        var yAxisGroup = chart.append("g")
+            .attr("transform","translate(" + margin.left + ",0)");
+    
+    function draw_line(data) {
+        chart
+            .attr("width",chartwidth)
+            .attr("height",chartheight)
+        
+        // Create scale and domain
+        var xScale = d3.scale.linear()
+                .range([margin.left,innerWidth+margin.right])
+                .domain([1,12]);
+        
+        var yScale = d3.scale.linear()
+                .range([innerHeight+margin.bottom,margin.bottom])
+                .domain(d3.extent(data, function(d) { return d.volume})); 
+        
+        // define Axis
+        var xAxis = d3.svg.axis()
+                .scale(xScale)
+                .orient("bottom");
+  
+        var yAxis = d3.svg.axis()
+                .scale(yScale)
+                .orient("left");
+        
+        xAxisGroup.call(xAxis);
+        yAxisGroup.call(yAxis);
+        
+        // draw lines
+        var lines = d3.svg.line()
+                .x(function(d) { return xScale(d.month);})
+                .y(function(d) { return yScale(d.volume);});
+        
+        chart.append("path")
+            .attr("d",lines(data))
+            .attr("stroke","green")
+            .attr("stroke-width",2)
+            .attr("fill","none")
+        
+        chart.append("path")
+            .attr("d",lines(data1))
+            .attr("stroke","pink")
+            .attr("stroke-width",2)
+            .attr("fill","none")
+    }
+    
+    //draw line chart!!
+    d3.json("volume.json",function(error,result){
+            data = result;
+            draw_line(data);
+        })
+
+                
+
+</script>
+</html>
