@@ -35,7 +35,7 @@
     function draw_line(data) {
         chart
             .attr("width",chartwidth)
-            .attr("height",chartheight)
+            .attr("height",chartheight);
         
         // Create scale and domain
         var xScale = d3.scale.linear()
@@ -44,7 +44,7 @@
         
         var yScale = d3.scale.linear()
                 .range([innerHeight+margin.bottom,margin.bottom])
-                .domain(d3.extent(data, function(d) { return d.volume})); 
+                .domain(d3.extent(data, function(d) { return d.volume / 48}));
         
         // define Axis
         var xAxis = d3.svg.axis()
@@ -61,19 +61,19 @@
         // draw lines
         var lines = d3.svg.line()
                 .x(function(d) { return xScale(d.month);})
-                .y(function(d) { return yScale(d.volume);});
+                .y(function(d) { return yScale(d.volume / 48);});
         
         chart.append("path")
             .attr("d",lines(data))
             .attr("stroke","green")
             .attr("stroke-width",2)
-            .attr("fill","none")
+            .attr("fill","none");
         
         chart.append("path")
             .attr("d",lines(data1))
             .attr("stroke","pink")
             .attr("stroke-width",2)
-            .attr("fill","none")
+            .attr("fill","none");
     }
     
     //draw line chart!!
