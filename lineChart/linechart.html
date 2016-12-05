@@ -44,7 +44,7 @@
         
         var yScale = d3.scale.linear()
                 .range([innerHeight+margin.bottom,margin.bottom])
-                .domain(d3.extent(data, function(d) { return d.volume / 48}));
+                .domain(d3.extent(data, function(d) { return d.volume / 49}));
         
         // define Axis
         var xAxis = d3.svg.axis()
@@ -61,7 +61,7 @@
         // draw lines
         var lines = d3.svg.line()
                 .x(function(d) { return xScale(d.month);})
-                .y(function(d) { return yScale(d.volume / 48);});
+                .y(function(d) { return yScale(d.volume / 49);});
         
         chart.append("path")
             .attr("d",lines(data))
