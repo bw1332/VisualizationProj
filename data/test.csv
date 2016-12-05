@@ -1,0 +1,7 @@
+from,to,count
+abc,gfs,2
+gfs,abc,3
+ttt,sss,1
+sss,ttt,5
+abc,sss,3
+abc,ttt,1
