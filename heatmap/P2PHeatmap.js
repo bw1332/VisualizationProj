@@ -23,7 +23,7 @@ var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
 });
 svg.call(tip);
 
-d3.json("janPPV.json", function (error, result) {
+d3.json("P2PJan.json", function (error, result) {
     originData = result;
     render(result);
 });
@@ -52,19 +52,10 @@ function render(result) {
 function createHeatmap(data) {
     var xElementsArray = d3.set(data.map(function (d) {
         return d.Name1;
-    })).values().sort(function (a, b) {
-        var nameA = a.toUpperCase();
-        var nameB = b.toUpperCase();
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
-        return 0;
-    });
+    })).values();
 
-    var yElementsArray = d3.set(data.map(function (d) {
+    var yElementsArray = xElementsArray;
+   /* var yElementsArray = d3.set(data.map(function (d) {
         return d.Name2;
     })).values().sort(function (a, b) {
         var nameA = a.toUpperCase();
@@ -76,7 +67,7 @@ function createHeatmap(data) {
             return 1;
         }
         return 0;
-    });
+    });*/
 
     var xScale = d3.scale.ordinal().domain(xElementsArray).rangeBands([0, xElementsArray.length * itemSize]);
     var yScale = d3.scale.ordinal().domain(yElementsArray).rangeBands([0, yElementsArray.length * itemSize]);
