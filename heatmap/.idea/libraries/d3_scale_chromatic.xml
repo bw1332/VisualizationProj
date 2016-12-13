@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="d3-scale-chromatic" type="javaScript">
+    <CLASSES />
+    <DOCUMENTATION>
+      <root url="https://d3js.org/d3-color.v1.min.js" />
+      <root url="https://d3js.org/d3-interpolate.v1.min.js" />
+      <root url="https://d3js.org/d3-scale-chromatic.v1.min.js" />
+    </DOCUMENTATION>
+    <SOURCES />
+  </library>
+</component>

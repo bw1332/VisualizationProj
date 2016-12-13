@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="PHP">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../d3 lab/d3-labs" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/../../d3 lab/d3-labs" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="d3.v3" level="application" />
+    <orderEntry type="library" name="d3-scale-chromatic" level="project" />
+    <orderEntry type="library" name="d3-color.v1" level="application" />
+    <orderEntry type="library" name="d3-interpolate.v1" level="application" />
+    <orderEntry type="library" name="d3-scale-chromatic.v1" level="application" />
+    <orderEntry type="library" name="d3.tip.v0.6.3" level="application" />
+    <orderEntry type="library" name="colorbrewer.v1" level="application" />
+  </component>
+</module>
