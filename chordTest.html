@@ -65,9 +65,10 @@
       //*******************************************************************
       function drawChords (matrix, mmap) {
         var w = 980, h = 800, r1 = h / 2, r0 = r1 - 100;
-        var fill = d3.scale.ordinal()
-            .domain(d3.range(1))
-            .range(["#F26223"]);
+//        var fill = d3.scale.ordinal()
+//            .domain(d3.range(1))
+//            .range(["#F26223"]);
+          var fill = d3.scale.category20();
         var chord = d3.layout.chord()
             .padding(.02)
             .sortSubgroups(d3.descending)
@@ -115,13 +116,7 @@
                 .style("stroke", function(d) { return d3.rgb(fill(d.target.index)).darker(); })
                 .style("fill", function(d) { return fill(d.target.index); })
                 .attr("d", d3.svg.chord().radius(r0))
-                .on("mouseover", function (d) {
-                  d3.select("#tooltip")
-                    .style("visibility", "visible")
-                    .html(chordTip(rdr(d)))
-                    .style("top", function () { return (d3.event.pageY - 100)+"px"})
-                    .style("left", function () { return (d3.event.pageX - 100)+"px";})
-                })
+                .on("mouseover", mouseover)
                 .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
       }
           
