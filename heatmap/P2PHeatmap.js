@@ -4,7 +4,10 @@ var outerHeight = 800;
 var width = outerWidth - margin.right - margin.left;
 var height = outerHeight - margin.top - margin.bottom;
 var monthSelected = 1;
+
 var originData = [];
+var datasets = ["P2PJan.json", "JanPPV.json"];
+var datasetPicker = d3.select("#dataset-picker").selectAll(".dataset-button").data(datasets);
 
 var itemSize = 13;
 var cellSize = itemSize - 1;
@@ -26,10 +29,23 @@ var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
 });
 svg.call(tip);
 
-d3.json("P2PJan.json", function (error, result) {
-    originData = result;
-    render(result);
-});
+heatmapChart(datasets[0]);
+
+datasetPicker.enter()
+    .append("input")
+    .attr("value", function(d){ return "Dataset " + d })
+    .attr("type", "button")
+    .attr("class", "dataset-button")
+    .on("click", function(d) {
+        heatmapChart(d);
+    });
+
+function heatmapChart(jsonFile) {
+    d3.json(jsonFile, function (error, result) {
+        originData = result;
+        render(result);
+    });
+}
 
 function setMonth(newMonth) {
     monthSelected = newMonth;
@@ -77,7 +93,7 @@ function createHeatmap(data) {
         return d.Name2;
     })).values();
 
-    var xScale = d3.scale.ordinal().domain(xElementsArray).rangeBands([0, xElementsArray.length * itemSize]);
+    /*var xScale = d3.scale.ordinal().domain(xElementsArray).rangeBands([0, xElementsArray.length * itemSize]);
     var yScale = d3.scale.ordinal().domain(yElementsArray).rangeBands([0, yElementsArray.length * itemSize]);
 
     var xAxis = d3.svg.axis().scale(xScale)
@@ -89,7 +105,7 @@ function createHeatmap(data) {
         .tickFormat(function (d) {
             return d;
         })
-        .orient("left");
+        .orient("left");*/
 
     var colorScale = d3.scale.quantile()
         .range(colors).domain([0, 9, 167]);
@@ -100,20 +116,33 @@ function createHeatmap(data) {
         .attr("width", cellSize)
         .attr("height", cellSize)
         .attr("x", function (d) {
-            return xScale(d.Name1);
+            return xElementsArray.indexOf(d.Name1) * cellSize;
+            //return xScale(d.Name1);
         })
         .attr("y", function (d) {
-            return yScale(d.Name2)
+            return yElementsArray.indexOf(d.Name2) * cellSize;
+            //return yScale(d.Name2);
         })
-        .on("mouseover", tip.show)
-        .on("mouseout", tip.hide);
+        .attr("class", function(d){return "cell cell-border x" + xElementsArray.indexOf(d.Name1) + " y" + yElementsArray.indexOf(d.Name2)})
+        .on("mouseover", function (d) {
+            d3.select(this).classed("cell-hover",true);
+            d3.selectAll(".xLabel").classed("text-highlight",function(r){ return r==d.Name1;});
+            d3.selectAll(".yLabel").classed("text-highlight",function(c){ return c==d.Name2;});
+            tip.show(d)
+        })
+        .on("mouseout", function (d) {
+            d3.select(this).classed("cell-hover",false);
+            d3.selectAll(".xLabel").classed("text-highlight",false);
+            d3.selectAll(".yLabel").classed("text-highlight",false);
+            tip.hide(d);
+        });
     cells.exit().remove();
     cells.transition()
         .attr("fill", function (d) {
             return colorScale(d.Volume);
         });
 
-    svg.append("g")
+    /*svg.append("g")
         .attr("class", "x axis")
         .call(xAxis)
         .selectAll("text")
@@ -121,13 +150,43 @@ function createHeatmap(data) {
         .attr("transform", "rotate(-90)")
         .attr("dx", ".8em")
         .attr("dy", "1.2em")
-        .style("text-anchor", "start");
+        .style("text-anchor", "start");*/
+    var xLabels = svg.append("g")
+            .selectAll(".xLabelg")
+            .data(xElementsArray)
+            .enter()
+            .append("text")
+            .text(function (d) { return d; })
+            .attr("x", 0)
+            .attr("y", function (d, i) { return i * cellSize; })
+            .attr("font-weight", "normal")
+            .style("text-anchor", "start")
+            .attr("transform", "translate("+cellSize/2 + ",-6) rotate (-90)")
+            .attr("dx", ".4em")
+            .attr("dy", ".3em")
+            .attr("class", function (d,i) { return "xLabel mono r"+i;} )
+            .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
+            .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});
 
-    svg.append("g")
+    /*svg.append("g")
         .attr("class", "y axis")
         .call(yAxis)
         .selectAll("text")
-        .attr("font-weight", "normal");
+        .attr("font-weight", "normal");*/
+    var yLabels = svg.append("g")
+        .selectAll(".yLabelg")
+        .data(yElementsArray)
+        .enter()
+        .append("text")
+        .text(function (d) { return d; })
+        .attr("x", 0)
+        .attr("y", function (d, i) { return i * cellSize; })
+        .style("text-anchor", "end")
+        .attr("transform", "translate(-6," + cellSize / 2 + ")")
+        .attr("dy", ".3em")
+        .attr("class", function (d,i) { return "yLabel mono r"+i;} )
+        .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
+        .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});
 
     legendBar(colorScale);
 }
