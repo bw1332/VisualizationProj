@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <style>
+        h3.subject {
+            font-family: Arial;
+            font-size: 20px;
+        }
+        .domain{
+                fill:none;
+                stroke: #000;
+            }
+        .tick{
+                font-size:12;
+            }
+        .tick line{
+                stroke:#ccc;
+            }
+
+        .heatmap {
+            float:left;
+            margin-left: 50px;
+        }
+
+        #monthSelect {
+            margin-left: 45px;
+        }
+
+        #barchart {
+            float:left;
+            width: 500px;
+            height: 420px;
+            overflow-y: scroll;   
+            overflow-x:hidden;
+            margin-left: 40px;
+            border: solid 2px #ccc;
+        }
+        
+        #bartitle {
+            margin-left: 900px;
+        }
+        
+        #line_chart {
+            float:left;
+        }
+        
+        #tlt1 {
+            color: lightseagreen;
+            margin-left: 150px;
+        }
+        
+        #tlt2 {
+            color: darkgreen;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="heatmapStyle.css">
+</head>
+<body>
+    <h3 id="subject">Email Network Change Over Time</h3>
+    <hr>
+    
+    <!--heatmap-->
+    <div class="heatmap">
+    </div>
+    <div id="tooltip">Tooltip</div>
+
+    <!--barchart-->
+    <h3 id="bartitle">Contacts Change Over Time</h3>
+	<div id="barchart">
+        <div id="chart"></div>
+    </div>
+       
+    <!--linechart & timebar-->
+    <div id="line_chart">
+        <svg id="linechart" width = "500" height="400"></svg>
+    </div>
+    <input id="monthSelect" type="range" min=1 max=12 value=1 onchange="setMonth(this.value)" style="width: 510px">
+    
+    <!-- linechart representation -->
+    <div>
+        <b id="tlt1">- voloume/person &nbsp;&nbsp;</b>
+        <b id="tlt2">- contacts/person</b>
+    </div>
+    
+
+    
+</body>
+<!--    <script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>-->
+<script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+<script src="http://d3js.org/colorbrewer.v1.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script src="P2PHeatmap.js"></script>
+<script src="barchart.js"></script>
+<script src="linechart.js"></script>
+</html>
