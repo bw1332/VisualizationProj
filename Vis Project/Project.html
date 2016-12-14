@@ -18,35 +18,41 @@
         .tick line{
                 stroke:#ccc;
             }
-        #tooltip1 {
-            position: absolute;
-            top: 540px;
-            left: 900px;
-            background-color: white;
-            opacity: 0.8;
-            padding:5;
-            border: solid 1px black;
-            visibility: hidden;
-        }
 
         .heatmap {
             float:left;
+            margin-left: 50px;
         }
 
         #monthSelect {
-            margin-left: 50px;
+            margin-left: 45px;
         }
 
         #barchart {
             float:left;
             width: 500px;
-            height: 400px;
+            height: 420px;
             overflow-y: scroll;   
             overflow-x:hidden;
             margin-left: 40px;
+            border: solid 2px #ccc;
         }
+        
         #bartitle {
             margin-left: 900px;
+        }
+        
+        #line_chart {
+            float:left;
+        }
+        
+        #tlt1 {
+            color: lightseagreen;
+            margin-left: 150px;
+        }
+        
+        #tlt2 {
+            color: darkgreen;
         }
     </style>
     <link rel="stylesheet" type="text/css" href="heatmapStyle.css">
@@ -66,12 +72,17 @@
         <div id="chart"></div>
     </div>
        
-    <!--linechart-->
+    <!--linechart & timebar-->
     <div id="line_chart">
-        <svg id="linechart" width = "600" height="400"></svg>
+        <svg id="linechart" width = "500" height="400"></svg>
     </div>
-    <input id="monthSelect" type="range" min=1 max=12 value=1 onchange="setMonth(this.value)" style="width: 500px">
-    <div id="tooltip1">Tooltip</div>
+    <input id="monthSelect" type="range" min=1 max=12 value=1 onchange="setMonth(this.value)" style="width: 510px">
+    
+    <!-- linechart representation -->
+    <div>
+        <b id="tlt1">- voloume/person &nbsp;&nbsp;</b>
+        <b id="tlt2">- contacts/person</b>
+    </div>
     
 
     

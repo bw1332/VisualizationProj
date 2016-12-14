@@ -62,17 +62,18 @@
                 .y(function (d) { return yScale(d.volume / 48.0) ; });
         
         chart.append("path")
-            .attr("d", lines(data1))
-            .attr("stroke", "blue")
+            .attr("d", lines(data))
+            .attr("stroke", "darkgreen")
             .attr("stroke-width", 2)
             .attr("fill", "none");
         
         chart.append("path")
-            .attr("d", lines(data))
-            .attr("stroke", "pink")
+            .attr("d", lines(data1))
+            .attr("stroke", "lightseagreen")
             .attr("stroke-width", 2)
             .attr("fill", "none");
         
+
         // draw dots
         var dataPoints = dot1.selectAll("circle")
                 .data(data)
@@ -81,21 +82,13 @@
                 .attr("r", 5)
                 .attr("cx", function (d) {return xScale(d.month); })
                 .attr("cy", function (d) {return yScale(d.volume / 48.0); })
-                .attr("fill", "pink")
+                .attr("fill", "darkgreen")
                 .attr("opacity", 0.8)
                 .on('mouseenter', function(d, i) {
                     d3.select(this).style({stroke: "black"});
-                    d3.select("#tooltip1").style({
-                        visibility:"visible",
-                        top: d3.event.clientY,
-                        left: d3.event.clientX
-                    }).text("volume: " + d.volume + " month: " + d.month)
                 })
                 .on('mouseleave', function(d, i) {
                     d3.select(this).style({stroke: undefined});
-                    d3.select("#tooltip1").style({
-                        visibility: "hidden"
-                    })
                 })
         
         var dataPoints1 = dot.selectAll("circle")
@@ -105,21 +98,13 @@
                 .attr("r",5)
                 .attr("cx",function(d){return xScale(d.month)})
                 .attr("cy",function(d){return yScale(d.volume / 48.0)})
-                .attr("fill","blue")
+                .attr("fill","lightseagreen")
                 .attr("opacity", 0.8)
                 .on('mouseenter', function(d, i) {
                     d3.select(this).style({stroke: "black"});
-                    d3.select("#tooltip1").style({
-                        visibility:"visible",
-                        top: d3.event.clientY,
-                        left: d3.event.clientX
-                    }).text("volume: " + d.volume + " month: " + d.month)
                 })
                 .on('mouseleave', function(d, i) {
                     d3.select(this).style({stroke: undefined});
-                    d3.select("#tooltip1").style({
-                        visibility:"hidden"
-                    })
                 })
         
 
