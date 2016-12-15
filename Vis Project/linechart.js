@@ -63,7 +63,7 @@
         
         chart.append("path")
             .attr("d", lines(data))
-            .attr("stroke", "darkgreen")
+            .attr("stroke", "#253494")
             .attr("stroke-width", 2)
             .attr("fill", "none");
         
@@ -82,7 +82,7 @@
                 .attr("r", 5)
                 .attr("cx", function (d) {return xScale(d.month); })
                 .attr("cy", function (d) {return yScale(d.volume / 48.0); })
-                .attr("fill", "darkgreen")
+                .attr("fill", "#253494")
                 .attr("opacity", 0.8)
                 .on('mouseenter', function(d, i) {
                     d3.select(this).style({stroke: "black"});

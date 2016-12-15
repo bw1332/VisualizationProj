@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     
     <style>
-        h3.subject {
+        #subject {
             font-family: Arial;
-            font-size: 20px;
+            text-align: center;
+            font-size: 30px;
+            padding:0;
         }
         .domain{
                 fill:none;
@@ -35,7 +37,7 @@
             overflow-y: scroll;   
             overflow-x:hidden;
             margin-left: 40px;
-            border: solid 2px #ccc;
+            border: solid 2px darkgrey;
         }
         
         #bartitle {
@@ -52,7 +54,7 @@
         }
         
         #tlt2 {
-            color: darkgreen;
+            color: #253494;
         }
     </style>
     <link rel="stylesheet" type="text/css" href="heatmapStyle.css">
@@ -76,7 +78,7 @@
     <div id="line_chart">
         <svg id="linechart" width = "500" height="400"></svg>
     </div>
-    <input id="monthSelect" type="range" min=1 max=12 value=1 onchange="setMonth(this.value)" style="width: 510px">
+    <input id="monthSelect" type="range" min=1 max=12 value=1 onchange="setAllMonth(this.value)" style="width: 510px">
     
     <!-- linechart representation -->
     <div>
@@ -94,4 +96,10 @@
 <script src="P2PHeatmap.js"></script>
 <script src="barchart.js"></script>
 <script src="linechart.js"></script>
+    <script>
+        function setAllMonth (month) {
+            setBarMonth(month);
+            setMonth(month);
+        }
+    </script>
 </html>
