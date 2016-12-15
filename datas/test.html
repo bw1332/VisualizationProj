@@ -2,17 +2,13 @@
     <body>
     </body>
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="util.js"></script>
     <script>
-        // ----receive function----v
-function Get(yourUrl){
-    var Httpreq = new XMLHttpRequest(); // a new request
-    Httpreq.open("GET",yourUrl,false);
-    Httpreq.send(null);
-    return Httpreq.responseText;          
-}
-       
-  var json_obj = JSON.parse(Get("https://raw.githubusercontent.com/bw1332/VisualizationProj/master/data/fii"));
-console.log("this is the author name: "+json_obj.author_name);
-        //  ［“vol”,"from", "to"｝］[{"vol", "name1", "name2"}]
+       prepare();
+        while(_raw == undefined){
+            
+        }
+        console.log("done!!");
+        
     </script>
 </html>
