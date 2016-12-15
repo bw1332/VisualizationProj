@@ -1,0 +1,17 @@
+<html>
+    <body>
+    </body>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="util.js"></script>
+    <script> 
+        d3.json("https://rawgit.com/bw1332/VisualizationProj/master/source/fii.json", function(e, d){
+            if(e){
+                console.log("error");
+                return;
+            }
+            console.log(d["1"][0]["num"]);
+            console.log(getHeatMapFromTo(getMonthSource(d,1)));
+        });
+        
+    </script>
+</html>
