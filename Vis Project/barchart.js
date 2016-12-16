@@ -35,6 +35,8 @@ function renderBars(month){
         .attr("class", function(d, i) {return "bar " + d.name;})
         .attr("x", function(d, i) {return 0;})
         .attr("y", function(d, i) {return (dy+5)*i;})
+        .attr("width",0)
+        .transition().duration(1000)
         .attr("width", function(d, i) {return dx*d.volume[month]})
         .attr("height", dy)
         .attr("fill", "#41b6c4");
