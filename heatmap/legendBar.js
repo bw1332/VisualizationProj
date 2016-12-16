@@ -1,23 +1,22 @@
 /**
  * Created by mache on 12/16/2016.
  */
-var legendMargin = {top: 20, right: 20, bottom: 20, left: 220};
+var legendMargin = {top: 20, right: 20, bottom: 20, left: 20};
 var legendOuterWidth = 660;
-var legendOuterHeight = 50;
-
+var legendOuterHeight = 38;
 var legendHeight = legendOuterHeight - legendMargin.top - legendMargin.bottom;
-
 var legendElementSize = 40;
 var lengendElementY = legendHeight;
-var colors = colorbrewer.Blues[9];
-var legendColorScale = d3.scale.quantile().range(colors).domain([0, 9, 40, 167]);
+//colors = colorbrewer.Blues[9];
+//var legendColorScale = d3.scale.quantile().range(colors).domain([0, 7, 40, 117]);
 
 var legendSvg = d3.select(".legendBars").append("svg")
     .attr("width", legendOuterWidth)
     .attr("height", legendOuterHeight)
     .append("g")
     .attr("transform", "translate(" + legendMargin.left + "," + legendMargin.top + ")");
-legendBar(legendColorScale);
+
+legendBar(heatmapColorScale);
 
 function legendBar(colorScale) {
     var legend = legendSvg.selectAll(".legend").data([0].concat(colorScale.quantiles()), function (d) {

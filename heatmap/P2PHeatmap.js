@@ -1,6 +1,6 @@
-var heatmapMargin = {top: 120, right: 120, bottom: 120, left: 120};
-var heatmapOuterWidth = 860;
-var heatmapOuterHeight = 760;
+var heatmapMargin = {top: 120, right: 120, bottom: 0, left: 120};
+var heatmapOuterWidth = 800;
+var heatmapOuterHeight = 720;
 //var heatmapWeight = heatmapOuterWidth - heatmapMargin.right - heatmapMargin.left;
 //var heatmapHeight = heatmapOuterHeight - heatmapMargin.top - heatmapMargin.bottom;
 var monthSelected = 1;
@@ -9,7 +9,7 @@ var heatmapCellSize = heatmapItemSize - 1;
 //var legendElementSize = 60;
 //var lengendElementY = heatmapHeight;
 var colors = colorbrewer.Blues[9];
-var heatmapColorScale = d3.scale.quantile().range(colors).domain([0, 9, 167]);
+var heatmapColorScale = d3.scale.quantile().range(colors).domain([0, 3, 40, 117]);
 
 var originData = [];
 var datasets = ["https://rawgit.com/bw1332/VisualizationProj/master/source/fii.json"];
@@ -17,7 +17,8 @@ var datasetPickerFrom = d3.select("#dataset-picker-from").selectAll(".dataset-bu
 var datasetPickerTotal = d3.select("#dataset-picker-total").selectAll(".dataset-button-total").data(datasets);
 var pickerSelector = 0;
 
-var valuesForBarChart = [];
+var x_from ="sara.shackleton@enron.com";
+var x_to = "susan.bailey@enron.com";
 
 var heatmapSvg = d3.select(".heatmap").append("svg")
     .attr("width", heatmapOuterWidth)
@@ -121,14 +122,13 @@ function createHeatmap(data, allData) {
         .on("click", function (d) {
             //console.log(d.Name1);
             //console.log(d.Name2);
-            valuesForBarChart[0] = d.Name1;
-            valuesForBarChart[1] = d.Name2;
-            console.log(valuesForBarChart[0]);
-            console.log(valuesForBarChart[1]);
+            x_from = d.Name1;
+            x_to = d.Name2;
+            setAll (month, x_from, x_to);
             d3.select("#tooltip").style({
                 visibility: "visible",
-                top: d3.event.clientY + "px",
-                left: d3.event.clientX + "px",
+                top: d3.event.clientY + 2 + "px",
+                left: d3.event.clientX + 2 + "px",
                 opacity: 1
             });
             d3.select("#tooltip").html("EmailX: " + d.Name1 + "<br/>" +  "EmailY: " + d.Name2 + "<br/>" + "Volume: " + d.Volume );
