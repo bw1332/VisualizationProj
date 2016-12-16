@@ -1,15 +1,14 @@
-.axis path {
+.heatmapAxis path {
     fill: none;
-    stroke: #fff;
     shape-rendering: crispEdges;
 }
-.axis line {
+.heatmapAxis line {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
 }
 
-.axis text {
+.heatmapAxis text {
     font-family: sans-serif;
     font-size: 11px;
 }
