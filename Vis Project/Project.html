@@ -14,7 +14,7 @@
             text-align: center;
             font-size: 30px;
             padding: 20px;
-            background-color: #4080BF;
+            background-color: #4499EE;
             margin: 0px;
             color: white;
         }
@@ -165,12 +165,11 @@
         input[type=range]:focus::-ms-fill-upper {
             background: #ccc;
         }
-        #dataset-picker-total {
-            margin-left: 100px;
-        }
-        
-        #dataset-picker-from {
-            margin-left: 100px;
+        #picker {
+            position: absolute;
+            left: 30px;
+            top: 130px;
+            z-index: 1;
         }
     </style>
     <link rel="stylesheet" type="text/css" href="heatmapStyle.css">
@@ -180,8 +179,10 @@
     <hr>
     
     <!--heatmap-->
-    <div id="dataset-picker-total"></div>
-    <div id="dataset-picker-from"></div>
+    <div id="picker">
+        <div id="dataset-picker-total"></div>
+        <div id="dataset-picker-from"></div>
+    </div>
     <div class="heatmap"></div>
     <div class="legendBars"></div>
     <div id="tooltip" class="hidden">
@@ -217,7 +218,7 @@
 <script src="util.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script src="P2PHeatmap.js"></script>
-<script scr="lengendBar.js"></script>
+<script scr="legendBar.js"></script>
 <script src="barchart.js"></script>
 <script src="linechart.js"></script>
 </html>

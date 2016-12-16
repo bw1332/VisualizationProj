@@ -32,17 +32,18 @@ function renderbar(data) {
 //        .attr("class", function(d, i) {return "bar " + d.topic;})
         .attr("x", function(d, i) {return 0;})
         .attr("y", function(d, i) {return (dy+5)*i;})
-        .attr("width", function(d, i) {return dx*d.times})
+        .attr("width", 0)
         .attr("height", dy)
-        .attr("fill", "lightblue")
-        .transition().duration(500).delay(500);
+        .transition().duration(1000)
+        .attr("width", function(d, i) {return dx*d.times})
+        .attr("fill", "lightblue");
 
     // labels
     var text = svg.selectAll(".text1")
         .data(data)
         .enter()
         .append("text")
-//        .attr("class", function(d, i) {return "label " + d.label;})
+        .attr("class", function(d, i) {return "label " + d.label;})
         .attr("x", 5)
         .attr("y", function(d, i) {return (dy+5)*i + 20;})
         .text( function(d) {return d.topic;})
@@ -81,8 +82,10 @@ function setAll (month, x_from, x_to) {
 function setAllMonth(newMonth) {
     month = newMonth;
     setMonth(month);
+    console.log(x_from);
+    console.log(x_to);
     setAll(month, x_from, x_to);
 }
 
 //set default month
-setAllMonth(1);
+setAll(1, "sara.shackleton@enron.com", "susan.bailey@enron.com");
