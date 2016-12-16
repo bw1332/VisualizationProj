@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <style>
+        body {
+            background-color:#f7fbff;
+            margin: 0px;
+        }
+
+        #subject {
+            font-family: Helvetica;
+            text-align: center;
+            font-size: 30px;
+            padding: 20px;
+            background-color: #4080BF;
+            margin: 0px;
+            color: white;
+        }
+        
+        hr {
+            margin:0px;
+        }
+        .domain{
+                fill:none;
+                stroke: #000;
+            }
+        .tick{
+                font-size:12;
+            }
+        .tick line{
+                stroke:#ccc;
+            }
+
+        .heatmap {
+            float:left;
+            margin-left: 50px;
+        }
+
+        #monthSelect {
+            margin-left: 45px;
+        }
+
+        #barchart {
+            float:left;
+            width: 500px;
+            height: 420px;
+            overflow-y: scroll;   
+            overflow-x:hidden;
+            margin-left: 40px;
+            border: solid 2px darkgrey;
+        }
+        
+        #bartitle {
+            margin-left: 850px;
+            font-family: Times;
+        }
+        
+        #line_chart {
+            float:left;
+        }
+        
+        #tlt1 {
+            color: lightseagreen;
+            margin-left: 150px;
+        }
+        
+        #tlt2 {
+            color: #253494;
+        }
+        
+        input[type=range] {
+            /*removes default webkit styles*/
+            -webkit-appearance: none;
+
+            /*fix for FF unable to apply focus style bug */
+            border: 1px solid white;
+
+            /*required for proper track sizing in FF*/
+            width: 300px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 300px;
+            height: 5px;
+            background: #ddd;
+            border: none;
+            border-radius: 3px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            border: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #4080BF;
+            margin-top: -4px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #ccc;
+        }
+
+        input[type=range]::-moz-range-track {
+            width: 300px;
+            height: 5px;
+            background: #ddd;
+            border: none;
+            border-radius: 3px;
+        }
+        input[type=range]::-moz-range-thumb {
+            border: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: goldenrod;
+        }
+
+        /*hide the outline behind the border*/
+        input[type=range]:-moz-focusring{
+            outline: 1px solid white;
+            outline-offset: -1px;
+        }
+
+        input[type=range]::-ms-track {
+            width: 300px;
+            height: 5px;
+
+            /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+            background: transparent;
+
+            /*leave room for the larger thumb to overflow with a transparent border */
+            border-color: transparent;
+            border-width: 6px 0;
+
+            /*remove default tick marks*/
+            color: transparent;
+        }
+        input[type=range]::-ms-fill-lower {
+            background: #777;
+            border-radius: 10px;
+        }
+        input[type=range]::-ms-fill-upper {
+            background: #ddd;
+            border-radius: 10px;
+        }
+        input[type=range]::-ms-thumb {
+            border: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: goldenrod;
+        }
+        input[type=range]:focus::-ms-fill-lower {
+            background: #888;
+        }
+        input[type=range]:focus::-ms-fill-upper {
+            background: #ccc;
+        }
+        
+    </style>
+    <link rel="stylesheet" type="text/css" href="heatmapStyle.css">
+</head>
+<body>
+    <h3 id="subject">Email Network Change Over Time</h3>
+    <hr>
+    
+    <!--heatmap-->
+    <div id="heatmap" height = "400" width = "600" >
+    </div>
+    <div id="dataset-picker">
+    </div>
+    <div id="tooltip" class="hidden">
+        <p><span id="value"></p>
+    </div>
+
+    <!--barchart-->
+    <h3 id="bartitle">Keywords Change Over Time</h3>
+	<div id="barchart">
+        <div id="chart"></div>
+    </div>
+       
+    <!--linechart & timebar-->
+    <div id="line_chart">
+        <svg id="linechart" width = "500" height="400"></svg>
+    </div>
+
+    <!-- linechart representation -->
+    <div>
+        <b id="tlt1">- voloume/person &nbsp;&nbsp;</b>
+        <b id="tlt2">- contacts/person</b>
+    </div>
+    
+
+    
+</body>
+<!--    <script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>-->
+    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+    <script src="util.js"></script>
+    <script src="heatmap.js"></script>
+    
+<!--
+<script src="http://d3js.org/colorbrewer.v1.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+-->
+<!--
+<script src="P2PHeatmap.js"></script>
+<script src="barchart.js"></script>
+<script src="linechart.js"></script>
+-->
+    <script>
+      d3.json("https://raw.githubusercontent.com/bw1332/VisualizationProj/master/source/fii.json", function(e, d){
+            var heatMap = newHeatMap();
+            heatMap.init(getEmailList(d));
+            heatMap.update(getMonthSource(1));
+      });
+    </script>
+</html>

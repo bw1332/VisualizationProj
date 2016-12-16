@@ -31,12 +31,25 @@ function getMonthAndAmount(data){
     var res = new Array();
     for (var i = 1; i <= 12; i++) {
         var one = new Object();
-        one.month = i;
+        one.mon = i;
         var sum = 0;
         data[i].map( function(e){
             sum = sum + parseInt(e["num"]);
         });
         one.vol = parseInt(sum);
+        res.push(one);
+    }
+    return res;
+}
+
+// data is json onj from _Source
+// return an arr of {"mon":"vol"}
+function getMonthAndContasts(data){
+    var res = new Array();
+    for (var i = 1; i <=12; i++){
+        var one = new Object();
+        one.mon = i;
+        one.vol = data[i].length;
         res.push(one);
     }
     return res;
@@ -54,19 +67,26 @@ function getHeatMapDataFromTo(objs){
 // return [{from,to,num}] but in from to have same meanning in this case, num is the total num of sending and reveiving
 function getHeatMapDataTotal(objs){
     var fromToList = getHeatMapDataFromTo(objs);
+    var res = [];
     fromToList.map(function(one){
       fromToList.map(function(other){
           if (one.from == other.to && one.to == other.from) {
               one.num = one.num + other.num;
           }
       });
+        res.push(one);
+        var other = new Object();
+        other.from = one.to;
+        other.to = one.from;
+        other.num = one.num;
+        res.push(other);
     });
-    return fromToList;
+    return res;
 }
 
 // from _SOURCE
 // return a array of email sorted by total nums
-function findEmailList(data){
+function getEmailList(data){
     var all = new Object();
     for (var i = 1; i <= 12; i++) {
        data[i].map(function(e){
@@ -103,8 +123,7 @@ function findEmailList(data){
     return res;
 }
 
-// data is array from given month data, from email to email
-// 
+// data is array from given month data, from email to email 
 function getBarData(data, from, to){
     var res = []
     data.map(function(o){
