@@ -59,13 +59,6 @@ function generateHeatmapChart(jsonFile) {
     });
 }
 
-/*function generateHeatmapChartFrom(jsonFile) {
-    d3.json(jsonFile, function (error, result) {
-        originData = result;
-        render(getMonthSource(result, monthSelected));
-    });
-}*/
-
 function setMonth(newMonth) {
     monthSelected = newMonth;
     render(getMonthSource(originData, monthSelected));
@@ -73,30 +66,19 @@ function setMonth(newMonth) {
 }
 
 function render(result) {
-   // var result1 = getMonthSource(result, monthSelected);
     var resultSelected = pickerSelector == 0 ? result : getHeatMapDataTotal(result);
+    if (resultSelected === undefined) {
+        return;
+    }
     var data = resultSelected.map(function (d) {
         var dataset = [];
         dataset.Name1 = d.from;
         dataset.Name2 = d.to;
         dataset.Volume = d.num;
-        //dataset.Month = d.month;
         return dataset;
     });
     createHeatmap(data, originData);
 }
-
-/*function renderFrom(result) {
-    var data = result.map(function (d) {
-        var dataset = [];
-        dataset.Name1 = d.from;
-        dataset.Name2 = d.to;
-        dataset.Volume = d.num;
-        //dataset.Month = d.month;
-        return dataset;
-    });
-    createHeatmap(data, originData);
-}*/
 
 function createHeatmap(data, allData) {
     /*var xElementsArray = d3.set(data.map(function (d) {
@@ -136,7 +118,6 @@ function createHeatmap(data, allData) {
             return yScale(d.Name2);
         })
         .attr("class", function(d){return "cell cell-border x" + xElementsArray.indexOf(d.Name1) + " y" + yElementsArray.indexOf(d.Name2)})
-        //.on("click", tip.show)
         .on("click", function (d) {
             //console.log(d.Name1);
             //console.log(d.Name2);
@@ -144,19 +125,29 @@ function createHeatmap(data, allData) {
             valuesForBarChart[1] = d.Name2;
             console.log(valuesForBarChart[0]);
             console.log(valuesForBarChart[1]);
-        })
-        .on("mouseenter", function (d) {
-            d3.select(this).classed("cell-hover",true);
-            d3.selectAll(".xLabel").classed("text-highlight",function(r){ return r == d.Name1;});
-            d3.selectAll(".yLabel").classed("text-highlight",function(c){ return c == d.Name2;});
-            //tip.show(d);
             d3.select("#tooltip").style({
                 visibility: "visible",
                 top: d3.event.clientY + "px",
                 left: d3.event.clientX + "px",
                 opacity: 1
             });
-            d3.select("#tooltip").html("From: " + d.Name1 + "<br/>" +  "To: " + d.Name2 + "<br/>" + "Volume: " + d.Volume );
+            d3.select("#tooltip").html("EmailX: " + d.Name1 + "<br/>" +  "EmailY: " + d.Name2 + "<br/>" + "Volume: " + d.Volume );
+            /*d3.select(this).classed("cell-hover",true);
+            d3.selectAll(".xLabel").classed("text-highlight",function(r){ return r == d.Name1;});
+            d3.selectAll(".yLabel").classed("text-highlight",function(c){ return c == d.Name2;});*/
+        })
+        .on("mouseenter", function (d) {
+            d3.select(this).classed("cell-hover",true);
+            d3.selectAll(".xLabel").classed("text-highlight",function(r){ return r == d.Name1;});
+            d3.selectAll(".yLabel").classed("text-highlight",function(c){ return c == d.Name2;});
+            //tip.show(d);
+            /*d3.select("#tooltip").style({
+                visibility: "visible",
+                top: d3.event.clientY + "px",
+                left: d3.event.clientX + "px",
+                opacity: 1
+            });
+            d3.select("#tooltip").html("From: " + d.Name1 + "<br/>" +  "To: " + d.Name2 + "<br/>" + "Volume: " + d.Volume );*/
         })
         .on("mouseout", function (d) {
             d3.select(this).classed("cell-hover",false);
@@ -178,7 +169,6 @@ function createHeatmap(data, allData) {
             //return yElementsArray.indexOf(d.Name2) * heatmapCellSize;
             return yScale(d.Name2);
         })
-
         .attr("fill", function (d) {
             return heatmapColorScale(d.Volume);
         });
