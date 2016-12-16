@@ -14,7 +14,7 @@
             text-align: center;
             font-size: 30px;
             padding: 20px;
-            background-color: #4499EE;
+            background-color: #065FB9;
             margin: 0px;
             color: white;
         }
@@ -32,10 +32,9 @@
                 stroke:#ccc;
             }
 
-        .heatmap {
+        #mainchart {
             float:left;
         }
-
         #monthSelect {
             margin-left: 45px;
         }
@@ -183,8 +182,11 @@
         <div id="dataset-picker-total"></div>
         <div id="dataset-picker-from"></div>
     </div>
-    <div class="heatmap"></div>
-    <div class="legendBars"></div>
+    <div id="mainchart">
+        <div class="heatmap"></div>
+        <div class="legendBars"></div>
+    </div>
+
     <div id="tooltip" class="hidden">
         <p><span id="value"></span></p>
     </div>
@@ -218,7 +220,7 @@
 <script src="util.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script src="P2PHeatmap.js"></script>
-<script scr="legendBar.js"></script>
+<script src="legendBar.js"></script>
 <script src="barchart.js"></script>
 <script src="linechart.js"></script>
 </html>

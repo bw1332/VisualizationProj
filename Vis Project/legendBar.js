@@ -1,9 +1,9 @@
 /**
  * Created by mache on 12/16/2016.
  */
-var legendMargin = {top: 20, right: 20, bottom: 20, left: 220};
+var legendMargin = {top: 0, right: 20, bottom: 20, left: 220};
 var legendOuterWidth = 660;
-var legendOuterHeight = 50;
+var legendOuterHeight = 38;
 
 var legendHeight = legendOuterHeight - legendMargin.top - legendMargin.bottom;
 

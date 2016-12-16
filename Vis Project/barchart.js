@@ -1,7 +1,7 @@
 function renderbar(data) {
      
 	var chartwidth= 500;
-    var chartheight = 600;
+    var chartheight = 500;
     d3.select("#bar_svg").remove();
     
     var svg = d3.select("#chart")
@@ -20,9 +20,9 @@ function renderbar(data) {
     console.log(chartheight);
     console.log(data.length);
     
-    var dx = (chartwidth - 300) / max_n;
+    var dx = (chartwidth - 250) / max_n;
     
-    var dy = 30;
+    var dy = 40;
 
     // bars
     var bars = svg.selectAll(".bar")

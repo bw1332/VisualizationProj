@@ -1,6 +1,6 @@
-var heatmapMargin = {top: 120, right: 120, bottom: 120, left: 120};
+var heatmapMargin = {top: 120, right: 120, bottom: 0, left: 120};
 var heatmapOuterWidth = 800;
-var heatmapOuterHeight = 760;
+var heatmapOuterHeight = 720;
 //var heatmapWeight = heatmapOuterWidth - heatmapMargin.right - heatmapMargin.left;
 //var heatmapHeight = heatmapOuterHeight - heatmapMargin.top - heatmapMargin.bottom;
 var monthSelected = 1;
@@ -17,8 +17,8 @@ var datasetPickerFrom = d3.select("#dataset-picker-from").selectAll(".dataset-bu
 var datasetPickerTotal = d3.select("#dataset-picker-total").selectAll(".dataset-button-total").data(datasets);
 var pickerSelector = 0;
 
-x_from ="sara.shackleton@enron.com";
-x_to = "susan.bailey@enron.com";
+var x_from ="sara.shackleton@enron.com";
+var x_to = "susan.bailey@enron.com";
 
 var heatmapSvg = d3.select(".heatmap").append("svg")
     .attr("width", heatmapOuterWidth)
