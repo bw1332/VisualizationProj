@@ -1,19 +1,23 @@
 var heatmapMargin = {top: 120, right: 120, bottom: 120, left: 120};
 var heatmapOuterWidth = 860;
 var heatmapOuterHeight = 760;
-var heatmapWeight = heatmapOuterWidth - heatmapMargin.right - heatmapMargin.left;
-var heatmapHeight = heatmapOuterHeight - heatmapMargin.top - heatmapMargin.bottom;
+//var heatmapWeight = heatmapOuterWidth - heatmapMargin.right - heatmapMargin.left;
+//var heatmapHeight = heatmapOuterHeight - heatmapMargin.top - heatmapMargin.bottom;
 var monthSelected = 1;
 var heatmapItemSize = 13;
 var heatmapCellSize = heatmapItemSize - 1;
-var legendElementSize = 60;
-var lengendElementY = heatmapHeight;
+//var legendElementSize = 60;
+//var lengendElementY = heatmapHeight;
 var colors = colorbrewer.Blues[9];
 var colorScale = d3.scale.quantile().range(colors).domain([0, 9, 167]);
 
 var originData = [];
-var datasets = ["P2PJan.json", "https://rawgit.com/bw1332/VisualizationProj/master/source/fii.json"];
-var datasetPicker = d3.select("#dataset-picker").selectAll(".dataset-button").data(datasets);
+var datasets = ["https://rawgit.com/bw1332/VisualizationProj/master/source/fii.json"];
+var datasetPickerFrom = d3.select("#dataset-picker-from").selectAll(".dataset-button-from").data(datasets);
+var datasetPickerTotal = d3.select("#dataset-picker-total").selectAll(".dataset-button-total").data(datasets);
+var pickerSelector = 0;
+
+var valuesForBarChart = [];
 
 var heatmapSvg = d3.select(".heatmap").append("svg")
     .attr("width", heatmapOuterWidth)
@@ -29,27 +33,59 @@ var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
 });
 heatmapSvg.call(tip);
 
-generateHeatmapChart(datasets[1]);
+generateHeatmapChart(datasets[0]);
 
-datasetPicker.enter()
+datasetPickerFrom.enter()
     .append("input")
-    .attr("value", function(d){ return "Dataset " + d })
+    .attr("value", function(d, i){ return "Sent Email"})
     .attr("type", "button")
-    .attr("class", "dataset-button")
+    .attr("class", "dataset-button-from")
     .on("click", function(d) {
         generateHeatmapChart(d);
+        pickerSelector = 0;
     });
+
+datasetPickerTotal.enter()
+    .append("input")
+    .attr("value", function(d, i){ return "Total Email"})
+    .attr("type", "button")
+    .attr("class", "dataset-button-total")
+    .on("click", function(d) {
+        generateHeatmapChartTotal(d);
+        pickerSelector = 1;
+    });
+
+function generateHeatmapChartTotal(jsonFile) {
+    d3.json(jsonFile, function (error, result) {
+        originData = result;
+        renderTotal(getMonthSource(result, monthSelected));
+    });
+}
 
 function generateHeatmapChart(jsonFile) {
     d3.json(jsonFile, function (error, result) {
         originData = result;
-        render(result);
+        render(getMonthSource(result, monthSelected));
     });
 }
 
 function setMonth(newMonth) {
     monthSelected = newMonth;
-    render(originData);
+    pickerSelector == 0 ? render(getMonthSource(originData, monthSelected)) :  renderTotal(getMonthSource(originData, monthSelected));
+}
+
+function renderTotal(result) {
+   // var result1 = getMonthSource(result, monthSelected);
+    var result2 = getHeatMapDataTotal(result);
+    var data = result2.map(function (d) {
+        var dataset = [];
+        dataset.Name1 = d.from;
+        dataset.Name2 = d.to;
+        dataset.Volume = d.num;
+        //dataset.Month = d.month;
+        return dataset;
+    });
+    createHeatmap(data, originData);
 }
 
 function render(result) {
@@ -60,9 +96,9 @@ function render(result) {
         d.name1 = nameTrans(d.name1);
         d.name2 = nameTrans(d.name2);
     });*/
-    var result1 = getMonthSource(result, monthSelected);
+   // var result1 = getMonthSource(result, monthSelected);
     //console.log(result1[0]);
-    var data = result1.map(function (d) {
+    var data = result.map(function (d) {
         var dataset = [];
         dataset.Name1 = d.from;
         dataset.Name2 = d.to;
@@ -92,14 +128,14 @@ function createHeatmap(data, data1) {
     var yScale = d3.scale.ordinal().domain(yElementsArray).rangeBands([0, yElementsArray.length * heatmapItemSize]);
 
     var xAxis = d3.svg.axis().scale(xScale)
-        /*.tickFormat(function (d) {
-            return d;
-        })*/
+        .tickFormat(function (d) {
+            return nameTrans(d);
+        })
         .orient("top");
     var yAxis = d3.svg.axis().scale(yScale)
-        /*.tickFormat(function (d) {
-            return d;
-        })*/
+        .tickFormat(function (d) {
+            return nameTrans(d);
+        })
         .orient("left");
     //heatmapSvg.selectAll("rect").remove();
     var cells = heatmapSvg.selectAll("rect").data(data);
@@ -116,12 +152,20 @@ function createHeatmap(data, data1) {
             return yScale(d.Name2);
         })
         .attr("class", function(d){return "cell cell-border x" + xElementsArray.indexOf(d.Name1) + " y" + yElementsArray.indexOf(d.Name2)})
-        .on("click", tip.show)
+        //.on("click", tip.show)
+        .on("click", function (d) {
+            console.log(d.Name1);
+            console.log(d.Name2);
+            valuesForBarChart[0] = d.Name1;
+            valuesForBarChart[1] = d.Name2;
+            console.log(valuesForBarChart[0]);
+            console.log(valuesForBarChart[1]);
+        })
         .on("mouseover", function (d) {
             d3.select(this).classed("cell-hover",true);
             d3.selectAll(".xLabel").classed("text-highlight",function(r){ return r==d.Name1;});
             d3.selectAll(".yLabel").classed("text-highlight",function(c){ return c==d.Name2;});
-            //tip.show(d)
+            tip.show(d)
         })
         .on("mouseout", function (d) {
             d3.select(this).classed("cell-hover",false);
@@ -177,7 +221,6 @@ function createHeatmap(data, data1) {
         .call(yAxis)
         .selectAll("text")
         .attr("class", function (d,i) { return "yLabel mono y"+ i;} )
-        .attr("font-weight", "normal")
         .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
         .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});
    /* var yLabels = heatmapSvg.append("g")
@@ -198,7 +241,7 @@ function createHeatmap(data, data1) {
     //legendBar(colorScale);
 }
 
-function legendBar(colorScale) {
+/*function legendBar(colorScale) {
     var legend = heatmapSvg.selectAll(".legend").data([0].concat(colorScale.quantiles()), function (d) {
         return d;
     });
@@ -223,7 +266,7 @@ function legendBar(colorScale) {
         })
         .attr("y", lengendElementY);
     legend.exit().remove();
-}
+}*/
 
 /*function changeName(data) {
     data.forEach(function (d) {
@@ -233,141 +276,13 @@ function legendBar(colorScale) {
     return data;
 }*/
 
-function nameTrans(name) {
-    var name1 = name.substr(0, name.indexOf('@'));
-    var name1First = name1.substr(0, name1.indexOf('.'));
-    name1First = name1First.charAt(0).toUpperCase() + name1First.slice(1);
-    var name1Last = name1.substr(name1.indexOf('.') + 1);
-    name1Last = name1Last.charAt(0).toUpperCase() + name1Last.slice(1);
-    return name1First + " " + name1Last;
+function nameTrans(email) {
+    var nameString = email.substring(0,email.indexOf("@")).replace("."," ");
+    var space = nameString.indexOf(" ");
+    var nameStringFrist = nameString.substring(0, space);
+    var nameStringLast = nameString.substring(space + 1);
+    return nameStringFrist.charAt(0).toUpperCase() + nameStringFrist.substring(1) + " " + nameStringLast.charAt(0).toUpperCase() + nameStringLast.substring(1);
 }
 
-function getMonthSource(jsonData, mon){
-    var month = 0;
-    if (typeof mon === 'string'){
-        month = parseInt(mon);
-    } else{
-        month = mon;
-    }
-    if (month > 0 && month < 13) {
-        return jsonData[month];
-    }
-}
 
-// obj is array of json, attrs is array of selected attributes(string)
-// return a new array of json
-function getJsonArrWith(objs, attrs){
-    return objs.map(function(obj){
-        var one = {};
-        attrs.map(function(attr){
-            one[attr] = obj[attr];
-        });
-        return one;
-    })
-}
-
-// data is json obj from _SOURCE
-// return an arr of{"mon":"vol"}
-function getMonthAndAmount(data){
-    var res = new Array();
-    for (var i = 1; i <= 12; i++) {
-        var one = new Object();
-        one.month = i;
-        var sum = 0;
-        data[i].map( function(e){
-            sum = sum + parseInt(e["num"]);
-        });
-        one.vol = parseInt(sum);
-        res.push(one);
-    }
-    return res;
-}
-
-// objs is an array of json objs for given month
-// this function usually uses getMonthSource() as input
-// return [{from,to, num}];
-function getHeatMapDataFromTo(objs){
-    return getJsonArrWith(objs, ["from","to","num"]);
-}
-
-// objs is an array of json objs for given month
-// this function usually uses getMonthSource() as input
-// return [{from,to,num}] but in from to have same meanning in this case, num is the total num of sending and reveiving
-function getHeatMapDataTotal(objs){
-    var fromToList = getHeatMapDataFromTo(objs);
-    fromToList.map(function(one){
-        fromToList.map(function(other){
-            if (one.from == other.to && one.to == other.from) {
-                one.num = one.num + other.num;
-            }
-        });
-    });
-    return fromToList;
-}
-
-// from _SOURCE
-// return a array of email sorted by total nums
-function findEmailList(data){
-    var all = new Object();
-    for (var i = 1; i <= 12; i++) {
-        data[i].map(function(e){
-            var to = e.to;
-            var from = e.from;
-            if (all.hasOwnProperty(to)){
-                var num = all[to];
-                num = parseInt(num) + 1;
-                all[to] = num;
-            } else {
-                all[to] = 1;
-            }
-            if (all.hasOwnProperty(from)){
-                var num = all[from];
-                num = parseInt(num) + 1;
-                all[from] = num;
-            } else {
-                all[from] = 1;
-            }
-        });
-    }
-    var list = [];
-    for (var att in all) {
-        list.push([att,all[att]]);
-    }
-    list.sort(function(a, b){
-        return (b[1]) - (a[1]);
-    });
-
-    var res = [];
-    list.map(function(x){
-        res.push(x[0]);
-    });
-    return res;
-}
-
-// data is array from given month data, from email to email
-//
-function getBarData(data, from, to){
-    var res = [];
-    data.map(function(o){
-        if (o.from == from && o.to == to){
-            for (var i = 0; i < o.topics.length; i++) {
-                var one = new Object();
-                one.topic = o.topics[i];
-                one.times = o.times[i];
-                res.push(one);
-            }
-        }
-    });
-    return res;
-}
-
-// input email addr
-// return the name
-function cutEmail(email){
-    var end = email.indexOf("@");
-    if (end > 0) {
-        return email.substring(0,end).replace("."," ");
-    }
-    return  email;
-}
 

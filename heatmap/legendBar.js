@@ -10,7 +10,7 @@ var legendHeight = legendOuterHeight - legendMargin.top - legendMargin.bottom;
 var legendElementSize = 40;
 var lengendElementY = legendHeight;
 var colors = colorbrewer.Blues[9];
-var legendColorScale = d3.scale.quantile().range(colors).domain([0, 9, 167]);
+var legendColorScale = d3.scale.quantile().range(colors).domain([0, 9, 40, 167]);
 
 var legendSvg = d3.select(".legendBars").append("svg")
     .attr("width", legendOuterWidth)
