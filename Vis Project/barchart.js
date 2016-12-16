@@ -55,7 +55,7 @@ function renderbar(data) {
         .enter()
         .append("text")
 //        .attr("class", function(d, i) {return "label " + d.label;})
-        .attr("x", 400)
+        .attr("x", 300)
         .attr("y", function(d, i) {return (dy+5)*i + 20;})
         .text( function(d) {return d.times;})
         .style({"font-size": "15px", "fill":"#777"})
