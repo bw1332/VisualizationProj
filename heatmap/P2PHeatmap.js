@@ -1,19 +1,18 @@
 var margin = {top: 120, right: 120, bottom: 20, left: 120};
-var outerWidth = 860;
-var outerHeight = 800;
+var outerWidth = 1200;
+var outerHeight = 1000;
 var width = outerWidth - margin.right - margin.left;
 var height = outerHeight - margin.top - margin.bottom;
 var monthSelected = 1;
+var itemSize = 17;
+var cellSize = itemSize - 1;
+var legendElementSize = 90;
+var lengendElementY = height;
+var colors = colorbrewer.Blues[9];
 
 var originData = [];
 var datasets = ["P2PJan.json", "JanPPV.json"];
 var datasetPicker = d3.select("#dataset-picker").selectAll(".dataset-button").data(datasets);
-
-var itemSize = 13;
-var cellSize = itemSize - 1;
-var legendElementSize = 40;
-var lengendElementY = height;
-var colors = colorbrewer.Greys[9];
 
 var svg = d3.select(".heatmap").append("svg")
     .attr("width", outerHeight)
@@ -29,7 +28,7 @@ var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
 });
 svg.call(tip);
 
-heatmapChart(datasets[0]);
+generateHeatmapChart(datasets[0]);
 
 datasetPicker.enter()
     .append("input")
@@ -37,10 +36,10 @@ datasetPicker.enter()
     .attr("type", "button")
     .attr("class", "dataset-button")
     .on("click", function(d) {
-        heatmapChart(d);
+        generateHeatmapChart(d);
     });
 
-function heatmapChart(jsonFile) {
+function generateHeatmapChart(jsonFile) {
     d3.json(jsonFile, function (error, result) {
         originData = result;
         render(result);
@@ -53,10 +52,6 @@ function setMonth(newMonth) {
 }
 
 function render(result) {
-    /*var result1 = changeName(result).filter(function (d) {
-        return d.month == monthSelected;
-    });*/
-
     var result1 = result.filter(function (d) {
         return d.month == monthSelected;
     });
@@ -64,22 +59,14 @@ function render(result) {
         d.name1 = nameTrans(d.name1);
         d.name2 = nameTrans(d.name2);
     });
-
     var data = result1.map(function (d) {
         var dataset = [];
         dataset.Name1 = d.name1;
         dataset.Name2 = d.name2;
         dataset.Volume = d.vol;
-        dataset.Month = d.month;
+        //dataset.Month = d.month;
         return dataset;
     });
-    /*var resultNameChanged = result.filter(function (d) {
-        return d.month == monthSelected;
-    });
-    resultNameChanged.forEach(function (d) {
-        d.name1 = nameTrans(d.name1);
-        d.name2 = nameTrans(d.name2);
-    });*/
     createHeatmap(data);
 }
 
@@ -93,7 +80,7 @@ function createHeatmap(data) {
         return d.Name2;
     })).values();
 
-    /*var xScale = d3.scale.ordinal().domain(xElementsArray).rangeBands([0, xElementsArray.length * itemSize]);
+    var xScale = d3.scale.ordinal().domain(xElementsArray).rangeBands([0, xElementsArray.length * itemSize]);
     var yScale = d3.scale.ordinal().domain(yElementsArray).rangeBands([0, yElementsArray.length * itemSize]);
 
     var xAxis = d3.svg.axis().scale(xScale)
@@ -105,7 +92,7 @@ function createHeatmap(data) {
         .tickFormat(function (d) {
             return d;
         })
-        .orient("left");*/
+        .orient("left");
 
     var colorScale = d3.scale.quantile()
         .range(colors).domain([0, 9, 167]);
@@ -116,19 +103,20 @@ function createHeatmap(data) {
         .attr("width", cellSize)
         .attr("height", cellSize)
         .attr("x", function (d) {
-            return xElementsArray.indexOf(d.Name1) * cellSize;
-            //return xScale(d.Name1);
+            //return xElementsArray.indexOf(d.Name1) * cellSize;
+            return xScale(d.Name1);
         })
         .attr("y", function (d) {
-            return yElementsArray.indexOf(d.Name2) * cellSize;
-            //return yScale(d.Name2);
+            //return yElementsArray.indexOf(d.Name2) * cellSize;
+            return yScale(d.Name2);
         })
         .attr("class", function(d){return "cell cell-border x" + xElementsArray.indexOf(d.Name1) + " y" + yElementsArray.indexOf(d.Name2)})
+        .on("click", tip.show)
         .on("mouseover", function (d) {
             d3.select(this).classed("cell-hover",true);
             d3.selectAll(".xLabel").classed("text-highlight",function(r){ return r==d.Name1;});
             d3.selectAll(".yLabel").classed("text-highlight",function(c){ return c==d.Name2;});
-            tip.show(d)
+            //tip.show(d)
         })
         .on("mouseout", function (d) {
             d3.select(this).classed("cell-hover",false);
@@ -142,16 +130,18 @@ function createHeatmap(data) {
             return colorScale(d.Volume);
         });
 
-    /*svg.append("g")
+    var xLabels = svg.append("g")
         .attr("class", "x axis")
         .call(xAxis)
         .selectAll("text")
-        .attr("font-weight", "normal")
-        .attr("transform", "rotate(-90)")
+        .attr("transform", "rotate(-45)")
         .attr("dx", ".8em")
-        .attr("dy", "1.2em")
-        .style("text-anchor", "start");*/
-    var xLabels = svg.append("g")
+        .attr("dy", ".2em")
+        .attr("class", function (d,i) { return "xLabel mono x"+i;} )
+        .style("text-anchor", "start")
+        .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
+        .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});
+    /*var xLabels = svg.append("g")
             .selectAll(".xLabelg")
             .data(xElementsArray)
             .enter()
@@ -166,14 +156,17 @@ function createHeatmap(data) {
             .attr("dy", ".3em")
             .attr("class", function (d,i) { return "xLabel mono r"+i;} )
             .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
-            .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});
+            .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});*/
 
-    /*svg.append("g")
+    var yLabels = svg.append("g")
         .attr("class", "y axis")
         .call(yAxis)
         .selectAll("text")
-        .attr("font-weight", "normal");*/
-    var yLabels = svg.append("g")
+        .attr("class", function (d,i) { return "yLabel mono y"+i;} )
+        .attr("font-weight", "normal")
+        .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
+        .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});
+    /*var yLabels = svg.append("g")
         .selectAll(".yLabelg")
         .data(yElementsArray)
         .enter()
@@ -186,7 +179,7 @@ function createHeatmap(data) {
         .attr("dy", ".3em")
         .attr("class", function (d,i) { return "yLabel mono r"+i;} )
         .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
-        .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});
+        .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});*/
 
     legendBar(colorScale);
 }
@@ -218,13 +211,13 @@ function legendBar(colorScale) {
     legend.exit().remove();
 }
 
-function changeName(data) {
+/*function changeName(data) {
     data.forEach(function (d) {
         d.name1 = nameTrans(d.name1);
         d.name2 = nameTrans(d.name2);
     });
     return data;
-}
+}*/
 
 function nameTrans(name) {
     var name1 = name.substr(0, name.indexOf('@'));
