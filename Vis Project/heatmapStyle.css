@@ -1,11 +1,11 @@
 .axis path {
     fill: none;
-    stroke: black;
+    stroke: #fff;
     shape-rendering: crispEdges;
 }
 .axis line {
     fill: none;
-    stroke: black;
+    stroke: #000;
     shape-rendering: crispEdges;
 }
 
@@ -41,20 +41,26 @@
     left: 0;
 }
 
-
 text.mono {
     font-size: 9pt;
-    font-family: Consolas, courier;
-    fill: #aaa;
+    font-family: Georgia;
+    fill: #000;
 }
-#tooltip {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: rgba(255,255,255,0.8);
-    padding: 5px;
-    border: solid 1px black;
-    visibility: hidden;
-    transition: all 0.5s;
-    opacity: 0;
+
+text.text-highlight {
+    fill: #c00;
+}
+text.text-hover {
+    fill: #00C;
+}
+
+rect.cell-border {
+    stroke: #eee;
+    stroke-width:1px;
+
+}
+
+rect.cell-hover {
+    stroke: #F00;
+    stroke-width:1px;
 }
