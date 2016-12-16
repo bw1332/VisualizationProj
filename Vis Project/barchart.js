@@ -88,4 +88,7 @@ function setAllMonth(newMonth) {
 }
 
 //set default month
-setAll(1, "sara.shackleton@enron.com", "susan.bailey@enron.com");
+var month = 1;
+setAll(month, x_from, x_to);
+setMonth(1);
+//setAllMonth(1);
