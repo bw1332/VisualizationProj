@@ -58,15 +58,64 @@ function getMonthAndContasts(data){
 // objs is an array of json objs for given month
 // this function usually uses getMonthSource() as input
 // return [{from,to, num}];
-function getHeatMapDataFromTo(objs){
-  return getJsonArrWith(objs, ["from","to","num"]);
+function getHeatMapDataFromTo1(objs, emailList){
+    var list = getJsonArrWith(objs,["from","to","num"]);
+    var allRes = [];
+//    for (var i in emailList) {
+//        for (var j in emailList) {
+//            var one = new Object();
+//            if (i == j) {
+//                one.from = i;
+//                one.to = j;
+//                one.num = 0;
+//                res.push(one);
+//            } else {
+//                var exist = false;
+//                list.map(function(e){
+//                    if(e.from == i && e.to == j) {
+//                        exist = true;
+//                        res.push(e);
+//                    }
+//                });
+//                if(!exist) {
+//                    one.from = i;
+//                    one.to = j;
+//                    one.num = 0;
+//                    res.push(one);
+//                }
+//            }
+//        }
+//    }
+       for(var i = 0; i < emailList.length; i++) {
+        for(var j = 0; j <emailList.length; j++) {
+            var exit = false;
+            list.map(function(e){
+                if(e.from == emailList[i] && e.to == emailList[j]){
+                    exit = true;
+                    allRes.push(e);
+                }
+            });
+            if(!exit) {
+                var one = new Object();
+                one.from = emailList[i];
+                one.to = emailList[j];
+                one.num = 0;
+                allRes.push(one);
+            }
+        }
+    }
+   // console.log(res);
+    return allRes;
 }
 
 // objs is an array of json objs for given month
 // this function usually uses getMonthSource() as input
 // return [{from,to,num}] but in from to have same meanning in this case, num is the total num of sending and reveiving
-function getHeatMapDataTotal(objs){
-    var fromToList = getHeatMapDataFromTo(objs);
+function getHeatMapDataTotal1(objs, emailList){
+    var fromToList = getJsonArrWith(objs,["from","to","num"]);
+    console.log(emailList);
+    console.log(objs);
+    console.log(fromToList);
     var res = [];
     fromToList.map(function(one){
       fromToList.map(function(other){
@@ -81,7 +130,29 @@ function getHeatMapDataTotal(objs){
         other.num = one.num;
         res.push(other);
     });
-    return res;
+  //  console.log(res);
+    var allRes = [];
+    for(var i = 0; i < emailList.length; i++) {
+        for(var j = 0; j <emailList.length; j++) {
+            var exit = false;
+            res.map(function(e){
+                if(e.from == emailList[i] && e.to == emailList[j]){
+                    exit = true;
+                    allRes.push(e);
+                }
+            });
+            if(!exit) {
+                var one = new Object();
+                one.from = emailList[i];
+                one.to = emailList[j];
+                one.num = 0;
+                allRes.push(one);
+            }
+        }
+    }
+    
+  //  console.log(allRes);
+    return allRes;
 }
 
 // from _SOURCE

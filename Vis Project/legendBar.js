@@ -17,7 +17,7 @@ var legendSvg = d3.select(".legendBars").append("svg")
     .attr("height", legendOuterHeight)
     .append("g")
     .attr("transform", "translate(" + legendMargin.left + "," + legendMargin.top + ")");
-legendBar(legendColorScale);
+legendBar(heatmapColorScale);
 
 function legendBar(colorScale) {
     var legend = legendSvg.selectAll(".legend").data([0].concat(colorScale.quantiles()), function (d) {
