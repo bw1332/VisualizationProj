@@ -1,6 +1,6 @@
 var heatmapMargin = {top: 120, right: 120, bottom: 0, left: 120};
 var heatmapOuterWidth = 800;
-var heatmapOuterHeight = 720;
+var heatmapOuterHeight = 800;
 //var heatmapWeight = heatmapOuterWidth - heatmapMargin.right - heatmapMargin.left;
 //var heatmapHeight = heatmapOuterHeight - heatmapMargin.top - heatmapMargin.bottom;
 var monthSelected = 1;
@@ -27,8 +27,8 @@ var heatmapSvg = d3.select(".heatmap").append("svg")
     .attr("transform", "translate(" + heatmapMargin.left + "," + heatmapMargin.top + ")");
 
 /*var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
-    return d.Name1 + "<br/>" +  d.Name2 + "<br/>" + d.Volume ;
-});*/
+ return d.Name1 + "<br/>" +  d.Name2 + "<br/>" + d.Volume ;
+ });*/
 //heatmapSvg.call(tip);
 
 generateHeatmapChart(datasets[0]);
@@ -37,20 +37,26 @@ datasetPickerFrom.enter()
     .append("input")
     .attr("value", function(d, i){ return "Sent Email"})
     .attr("type", "button")
+    .style("background","#C7C7E2")
     .attr("class", "dataset-button-from")
     .on("click", function(d) {
         generateHeatmapChart(d);
         pickerSelector = 0;
+        datasetPickerFrom.style("background", "lightblue");
+        datasetPickerTotal.style("background", "#C7C7E2");
     });
 
 datasetPickerTotal.enter()
     .append("input")
     .attr("value", function(d, i){ return "Total Email"})
     .attr("type", "button")
+    .style("background","#C7C7E2")
     .attr("class", "dataset-button-total")
     .on("click", function(d) {
         generateHeatmapChart(d);
         pickerSelector = 1;
+        datasetPickerFrom.style("background", "#C7C7E2");
+        datasetPickerTotal.style("background", "lightblue");
     });
 
 function generateHeatmapChart(jsonFile) {
@@ -67,7 +73,10 @@ function setMonth(newMonth) {
 }
 
 function render(result) {
-    var resultSelected = pickerSelector == 0 ? result : getHeatMapDataTotal(result);
+    if (result === undefined) {
+        return;
+    }
+    var resultSelected = pickerSelector == 0 ? getHeatMapDataFromTo1(result, findEmailList(originData)) : getHeatMapDataTotal1(result,findEmailList(originData));
     if (resultSelected === undefined) {
         return;
     }
@@ -83,13 +92,13 @@ function render(result) {
 
 function createHeatmap(data, allData) {
     /*var xElementsArray = d3.set(data.map(function (d) {
-        return cutEmail(d.Name1);
-    })).values();*/
+     return cutEmail(d.Name1);
+     })).values();*/
     var xElementsArray = findEmailList(allData);
     var yElementsArray = xElementsArray;
-   /*var yElementsArray = d3.set(data.map(function (d) {
-        return cutEmail(d.Name2);
-    })).values();*/
+    /*var yElementsArray = d3.set(data.map(function (d) {
+     return cutEmail(d.Name2);
+     })).values();*/
 
     var xScale = d3.scale.ordinal().domain(xElementsArray).rangeBands([0, xElementsArray.length * heatmapItemSize]);
     var yScale = d3.scale.ordinal().domain(yElementsArray).rangeBands([0, yElementsArray.length * heatmapItemSize]);
@@ -104,6 +113,8 @@ function createHeatmap(data, allData) {
             return nameTrans(d);
         })
         .orient("left");
+
+    //  heatmapSvg.selectAll("rect").remove();
 
     var cells = heatmapSvg.selectAll("rect").data(data);
     cells.enter().append("g").append("rect")
@@ -133,8 +144,8 @@ function createHeatmap(data, allData) {
             });
             d3.select("#tooltip").html("EmailX: " + d.Name1 + "<br/>" +  "EmailY: " + d.Name2 + "<br/>" + "Volume: " + d.Volume );
             /*d3.select(this).classed("cell-hover",true);
-            d3.selectAll(".xLabel").classed("text-highlight",function(r){ return r == d.Name1;});
-            d3.selectAll(".yLabel").classed("text-highlight",function(c){ return c == d.Name2;});*/
+             d3.selectAll(".xLabel").classed("text-highlight",function(r){ return r == d.Name1;});
+             d3.selectAll(".yLabel").classed("text-highlight",function(c){ return c == d.Name2;});*/
         })
         .on("mouseenter", function (d) {
             d3.select(this).classed("cell-hover",true);
@@ -142,12 +153,12 @@ function createHeatmap(data, allData) {
             d3.selectAll(".yLabel").classed("text-highlight",function(c){ return c == d.Name2;});
             //tip.show(d);
             /*d3.select("#tooltip").style({
-                visibility: "visible",
-                top: d3.event.clientY + "px",
-                left: d3.event.clientX + "px",
-                opacity: 1
-            });
-            d3.select("#tooltip").html("From: " + d.Name1 + "<br/>" +  "To: " + d.Name2 + "<br/>" + "Volume: " + d.Volume );*/
+             visibility: "visible",
+             top: d3.event.clientY + "px",
+             left: d3.event.clientX + "px",
+             opacity: 1
+             });
+             d3.select("#tooltip").html("From: " + d.Name1 + "<br/>" +  "To: " + d.Name2 + "<br/>" + "Volume: " + d.Volume );*/
         })
         .on("mouseout", function (d) {
             d3.select(this).classed("cell-hover",false);
@@ -160,10 +171,10 @@ function createHeatmap(data, allData) {
             });
         });
     cells.exit().remove();
-    cells.transition()
+    cells.transition().duration(500)
         .attr("x", function (d) {
-        //return xElementsArray.indexOf(d.Name1) * heatmapCellSize;
-        return yScale(d.Name1);
+            //return xElementsArray.indexOf(d.Name1) * heatmapCellSize;
+            return yScale(d.Name1);
         })
         .attr("y", function (d) {
             //return yElementsArray.indexOf(d.Name2) * heatmapCellSize;
@@ -190,21 +201,21 @@ function createHeatmap(data, allData) {
             d3.select(this).classed("text-hover",false);
         });
     /*var xLabels = heatmapSvg.append("g")
-            .selectAll(".xLabelg")
-            .data(xElementsArray)
-            .enter()
-            .append("text")
-            .text(function (d) { return d; })
-            .attr("x", 0)
-            .attr("y", function (d, i) { return i * heatmapCellSize; })
-            .attr("font-weight", "normal")
-            .style("text-anchor", "start")
-            .attr("transform", "translate("+heatmapCellSize/2 + ",-6) rotate (-90)")
-            .attr("dx", ".4em")
-            .attr("dy", ".3em")
-            .attr("class", function (d,i) { return "xLabel mono r"+i;} )
-            .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
-            .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});*/
+     .selectAll(".xLabelg")
+     .data(xElementsArray)
+     .enter()
+     .append("text")
+     .text(function (d) { return d; })
+     .attr("x", 0)
+     .attr("y", function (d, i) { return i * heatmapCellSize; })
+     .attr("font-weight", "normal")
+     .style("text-anchor", "start")
+     .attr("transform", "translate("+heatmapCellSize/2 + ",-6) rotate (-90)")
+     .attr("dx", ".4em")
+     .attr("dy", ".3em")
+     .attr("class", function (d,i) { return "xLabel mono r"+i;} )
+     .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
+     .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});*/
 
     var yLabels = heatmapSvg.append("g")
         .attr("class", "y heatmapAxis")
@@ -219,50 +230,50 @@ function createHeatmap(data, allData) {
         .on("mouseout" , function(d) {
             d3.select(this).classed("text-hover",false);
         });
-   /* var yLabels = heatmapSvg.append("g")
-        .selectAll(".yLabelg")
-        .data(yElementsArray)
-        .enter()
-        .append("text")
-        .text(function (d) { return d; })
-        .attr("x", 0)
-        .attr("y", function (d, i) { return i * heatmapCellSize; })
-        .style("text-anchor", "end")
-        .attr("transform", "translate(-6," + heatmapCellSize / 2 + ")")
-        .attr("dy", ".3em")
-        .attr("class", function (d,i) { return "yLabel mono r"+i;} )
-        .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
-        .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});*/
+    /* var yLabels = heatmapSvg.append("g")
+     .selectAll(".yLabelg")
+     .data(yElementsArray)
+     .enter()
+     .append("text")
+     .text(function (d) { return d; })
+     .attr("x", 0)
+     .attr("y", function (d, i) { return i * heatmapCellSize; })
+     .style("text-anchor", "end")
+     .attr("transform", "translate(-6," + heatmapCellSize / 2 + ")")
+     .attr("dy", ".3em")
+     .attr("class", function (d,i) { return "yLabel mono r"+i;} )
+     .on("mouseover", function(d) {d3.select(this).classed("text-hover",true);})
+     .on("mouseout" , function(d) {d3.select(this).classed("text-hover",false);});*/
 
     //legendBar(heatmapColorScale);
 }
 
 /*function legendBar(heatmapColorScale) {
-    var legend = heatmapSvg.selectAll(".legend").data([0].concat(heatmapColorScale.quantiles()), function (d) {
-        return d;
-    });
-    legend.enter().append("g").attr("class", "legend");
-    legend.append("rect")
-        .attr("x", function (d, i) {
-            return legendElementSize * i;
-        })
-        .attr("y", lengendElementY)
-        .attr("width", legendElementSize)
-        .attr("height", legendElementSize / 2)
-        .style("fill", function (d ,i) {
-            return colors[i];
-        });
-    legend.append("text")
-        .attr("class", "mono")
-        .text(function (d) {
-            return ">=" + Math.round(d);
-        })
-        .attr("x", function (d, i) {
-            return legendElementSize * i;
-        })
-        .attr("y", lengendElementY);
-    legend.exit().remove();
-}*/
+ var legend = heatmapSvg.selectAll(".legend").data([0].concat(heatmapColorScale.quantiles()), function (d) {
+ return d;
+ });
+ legend.enter().append("g").attr("class", "legend");
+ legend.append("rect")
+ .attr("x", function (d, i) {
+ return legendElementSize * i;
+ })
+ .attr("y", lengendElementY)
+ .attr("width", legendElementSize)
+ .attr("height", legendElementSize / 2)
+ .style("fill", function (d ,i) {
+ return colors[i];
+ });
+ legend.append("text")
+ .attr("class", "mono")
+ .text(function (d) {
+ return ">=" + Math.round(d);
+ })
+ .attr("x", function (d, i) {
+ return legendElementSize * i;
+ })
+ .attr("y", lengendElementY);
+ legend.exit().remove();
+ }*/
 
 function nameTrans(email) {
     var nameString = email.substring(0,email.indexOf("@")).replace("."," ");
@@ -271,6 +282,4 @@ function nameTrans(email) {
     var nameStringLast = nameString.substring(space + 1);
     return nameStringFirst.charAt(0).toUpperCase() + nameStringFirst.substring(1) + " " + nameStringLast.charAt(0).toUpperCase() + nameStringLast.substring(1);
 }
-
-
 
