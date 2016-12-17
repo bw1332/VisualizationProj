@@ -1,6 +1,6 @@
 function draw_line(data, data1) {
     // Create parameters
-        var chartwidth = 500;
+        var chartwidth = 450;
         var chartheight = 200;
         var margin = { top: 20, left: 50, right: 20, bottom: 20};
         var innerWidth = chartwidth - margin.left - margin.right;

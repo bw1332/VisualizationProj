@@ -7,6 +7,7 @@
         body {
             background-color:#f7fbff;
             margin: 0px;
+             font-family: Helvetica;
         }
 
         #subject {
@@ -18,7 +19,22 @@
             margin: 0px;
             color: white;
         }
+        .dataset-button-total {
+            background-color: #C7C7E2;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 5px;
+            outline: none;
+        }
         
+        .dataset-button-from {
+            background-color: #C7C7E2;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 5px;
+            outline: none;
+            
+        }
         hr {
             margin:0px;
         }
@@ -46,12 +62,13 @@
             overflow-y: auto;   
             overflow-x: hidden;
             margin-left: 40px;
-            border: solid 2px darkgrey;
+            border: solid 2px lightblue;
+            border-radius: 7px;
         }
         
         #bartitle {
             margin-left: 900px;
-            font-family: Times;
+            font-family: Helvetica;;
         }
         
         #line_chart {
@@ -207,7 +224,7 @@
         </div>
         <svg id="linechart" width = "500" height="400"></svg>
     </div>
-    <input id="monthSelect" type="range" min=1 max=12 value=1 onchange="setAllMonth(this.value)" style="width: 410px">
+    <input id="monthSelect" type="range" min=1 max=12 value=1 onchange="setAllMonth(this.value)" style="width: 357px">
     
 
     

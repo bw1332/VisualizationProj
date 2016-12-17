@@ -1,6 +1,6 @@
 var heatmapMargin = {top: 120, right: 120, bottom: 0, left: 120};
 var heatmapOuterWidth = 800;
-var heatmapOuterHeight = 720;
+var heatmapOuterHeight = 800;
 //var heatmapWeight = heatmapOuterWidth - heatmapMargin.right - heatmapMargin.left;
 //var heatmapHeight = heatmapOuterHeight - heatmapMargin.top - heatmapMargin.bottom;
 var monthSelected = 1;
@@ -42,7 +42,7 @@ datasetPickerFrom.enter()
     .on("click", function(d) {
         generateHeatmapChart(d);
         pickerSelector = 0;
-        datasetPickerFrom.style("background", "#065FB9");
+        datasetPickerFrom.style("background", "lightblue");
         datasetPickerTotal.style("background", "white");
     });
 
@@ -56,7 +56,7 @@ datasetPickerTotal.enter()
         generateHeatmapChart(d);
         pickerSelector = 1;
         datasetPickerFrom.style("background", "white");
-        datasetPickerTotal.style("background", "#065FB9");
+        datasetPickerTotal.style("background", "lightblue");
     });
 
 function generateHeatmapChart(jsonFile) {
