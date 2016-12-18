@@ -35,8 +35,9 @@ generateHeatmapChart(datasets[0]);
 
 datasetPickerFrom.enter()
     .append("input")
-    .attr("value", function(d, i){ return "Sent Email"})
+    .attr("value", function(d, i){ return "From/To"})
     .attr("type", "button")
+    .style("width","80px")
     .style("background","white")
     .attr("class", "dataset-button-from")
     .on("click", function(d) {
@@ -48,8 +49,9 @@ datasetPickerFrom.enter()
 
 datasetPickerTotal.enter()
     .append("input")
-    .attr("value", function(d, i){ return "Total Email"})
+    .attr("value", function(d, i){ return "Total"})
     .attr("type", "button")
+    .style("width","80px")
     .style("background","white")
     .attr("class", "dataset-button-total")
     .on("click", function(d) {
@@ -142,7 +144,11 @@ function createHeatmap(data, allData) {
                 left: d3.event.clientX + 2 + "px",
                 opacity: 1
             });
-            d3.select("#tooltip").html("EmailX: " + d.Name1 + "<br/>" +  "EmailY: " + d.Name2 + "<br/>" + "Volume: " + d.Volume );
+            if (pickerSelector == 0){
+                d3.select("#tooltip").html("From: " + d.Name1 + "<br/>" +  "To: " + d.Name2 + "<br/>" + "Volume: " + d.Volume);
+            }else {
+                d3.select("#tooltip").html("Email: " + d.Name1 + "<br/>" +  "Email: " + d.Name2 + "<br/>" + "Volume: " + d.Volume);
+            }
             /*d3.select(this).classed("cell-hover",true);
             d3.selectAll(".xLabel").classed("text-highlight",function(r){ return r == d.Name1;});
             d3.selectAll(".yLabel").classed("text-highlight",function(c){ return c == d.Name2;});*/
