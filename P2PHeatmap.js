@@ -138,6 +138,9 @@ function createHeatmap(data, allData) {
             x_from = d.Name1;
             x_to = d.Name2;
             setAll (month, x_from, x_to);
+            document.getElementById("subtitle").innerHTML = x_from + " & " + x_to;
+            document.getElementById("subtitle").style.visibility = "visible";
+            document.getElementById("bartitle").innerHTML = "Topics Between";
             d3.select("#tooltip").style({
                 visibility: "visible",
                 top: d3.event.clientY + 2 + "px",
