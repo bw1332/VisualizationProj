@@ -140,7 +140,7 @@ function createHeatmap(data, allData) {
             setAll (month, x_from, x_to);
             document.getElementById("subtitle").innerHTML = cutEmail(x_from) + " & " + cutEmail(x_to);
             document.getElementById("subtitle").style.visibility = "visible";
-            document.getElementById("bartitle").innerHTML = "Topics Between";
+            document.getElementById("bartitle").innerHTML = "Topics";
             d3.select("#tooltip").style({
                 visibility: "visible",
                 top: d3.event.clientY + 2 + "px",

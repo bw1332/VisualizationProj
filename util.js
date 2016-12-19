@@ -215,7 +215,10 @@ function getBarData(data, from, to){
 function cutEmail(email){
     var end = email.indexOf("@");
     if (end > 0) {
-        return email.substring(0,end).replace("."," ");
+        email = email.substring(0,end);
+        email = email.charAt(0).toUpperCase() + email.substring(1, email.length);
+        email = email.substring(0, email.indexOf(".") + 1) + email.charAt(email.indexOf(".") + 1).toUpperCase() + email.substring(email.indexOf(".") + 2, email.length);
+        return email.replace("."," ");
     } 
     return  email;
 }
