@@ -1,5 +1,5 @@
 //has dependency on d3 -v3
-var _SOURCE = "https://raw.githubcontent.com/bw1332/VisualizationProj/master/source/fii.json";
+var _SOURCE = "https://rawgit.com/bw1332/VisualizationProj/master/source/fii.json";
 
 function getMonthSource(jsonData, mon){
     var month = 0;
